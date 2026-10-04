@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'screens/home_screen.dart';
+import 'screens/note_form_screen.dart';
+import 'screens/saved_notes_screen.dart';
+import 'screens/api_data_screen.dart';
+import 'screens/device_feature_screen.dart';
+
 void main() {
   runApp(const TaskManagerApp());
 }
@@ -11,125 +17,21 @@ class TaskManagerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Student Task Manager',
-      home: const TaskHomePage(),
-    );
-  }
-}
-
-class TaskHomePage extends StatefulWidget {
-  const TaskHomePage({super.key});
-
-  @override
-  State<TaskHomePage> createState() => _TaskHomePageState();
-}
-
-class _TaskHomePageState extends State<TaskHomePage> {
-  final TextEditingController _taskController = TextEditingController();
-  final List<String> _tasks = [];
-
-  void _addTask() {
-    final String taskName = _taskController.text.trim();
-
-    if (taskName.isEmpty) {
-      return;
-    }
-
-    setState(() {
-      _tasks.add(taskName);
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Task added successfully'),
-      ),
-    );
-
-    _taskController.clear();
-  }
-
-  void _removeTask(int index) {
-    setState(() {
-      _tasks.removeAt(index);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Student Task Manager'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Text('Total Tasks: ${_tasks.length}'),
-            ),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Welcome! Add your tasks below',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _taskController,
-                        decoration: const InputDecoration(
-                          labelText: 'Task name',
-                          hintText: 'Enter a task',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    ElevatedButton(
-                      onPressed: _addTask,
-                      child: const Text('Add Task'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: _tasks.isEmpty
-                  ? const Center(
-                      child: Text('No tasks available'),
-                    )
-                  : ListView.builder(
-                      itemCount: _tasks.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            leading: const Icon(Icons.task_alt),
-                            title: Text(_tasks[index]),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () => _removeTask(index),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-            ),
-          ],
+      title: 'Student Notes Manager',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.teal,
         ),
       ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/add-note': (context) => const NoteFormScreen(),
+        '/saved-notes': (context) => const SavedNotesScreen(),
+        '/api-data': (context) => const ApiDataScreen(),
+        '/device-feature': (context) =>
+            const DeviceFeatureScreen(),
+      },
     );
   }
 }
